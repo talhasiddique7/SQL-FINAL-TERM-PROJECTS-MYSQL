@@ -1,0 +1,997 @@
+drop table if exists clients;
+drop table if exists freelancers;
+drop table if exists skills;
+drop table if exists freelancer_skills;
+drop table if exists projects;
+drop table if exists project_skills_required;
+drop table if exists bids;
+drop table if exists payments;
+drop table if exists earnings;
+drop table if exists reviews;
+
+
+CREATE TABLE Clients (
+    client_id INT PRIMARY KEY,
+    client_name VARCHAR(50),
+    email VARCHAR(100),
+    contact_number VARCHAR(20),
+	country_name   varchar(20)
+);
+
+CREATE TABLE freelancers (
+    freelancer_id INT PRIMARY KEY,
+    full_name VARCHAR(100),
+    email VARCHAR(100),
+    contact_number VARCHAR(20),
+    hourly_rate DECIMAL(10, 2),
+    availability_status VARCHAR(20),
+	country_name varchar(20)
+);
+
+CREATE TABLE skills (
+    skill_id INT PRIMARY KEY,
+    skill_name VARCHAR(100)
+);
+
+CREATE TABLE freelancer_skills (
+    freelancer_id INT,
+    skill_id INT
+	)
+
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY,
+    client_id INT,
+    title VARCHAR(100),
+    description TEXT,
+    budget DECIMAL(10, 2),
+    deadline DATE,
+    status VARCHAR(20),
+);
+
+CREATE TABLE project_skills_required (
+    project_id INT,
+    skill_id INT
+);
+
+CREATE TABLE bids (
+    bid_id INT PRIMARY KEY,
+    project_id INT,
+    freelancer_id INT,
+    amount DECIMAL(10, 2),
+    proposal TEXT,
+);
+
+CREATE TABLE payments (
+    payment_id INT PRIMARY KEY,
+    project_id INT,
+    client_id INT,
+    freelancer_id INT,
+    amount DECIMAL(10, 2),
+    payment_date DATE
+);
+
+CREATE TABLE earnings (
+    earning_id INT PRIMARY KEY,
+    freelancer_id INT,
+    project_id INT,
+    amount DECIMAL(10, 2),
+    earning_date DATE
+);
+
+CREATE TABLE reviews (
+    review_id INT PRIMARY KEY,
+    project_id INT,
+    client_id INT,
+    freelancer_id INT,
+    rating INT,
+    review_text TEXT
+);
+
+
+
+INSERT INTO clients VALUES
+    (1, 'Aarav Sharma', 'aarav.sharma@example.com', '555-123-4567', 'Indian'),
+    (2, 'Nisha Patel', 'nisha.patel@example.com', '555-987-6543', 'Indian'),
+    (3, 'Ravi Kumar', 'ravi.kumar@example.com', '555-456-7890', 'Indian'),
+    (4, 'Deepika Gupta', 'deepika.gupta@example.com', '555-789-1234', 'Indian'),
+    (5, 'Arjun Singh', 'arjun.singh@example.com', '555-234-5678', 'Indian'),
+    (6, 'Ayse Kaya', 'ayse.kaya@example.com', '555-123-4567', 'Turkish'),
+    (7, 'Emir Yilmaz', 'emir.yilmaz@example.com', '555-987-6543', 'Turkish'),
+    (8, 'Zeynep Öztürk', 'zeynep.ozturk@example.com', '555-456-7890', 'Turkish'),
+    (9, 'Burak Demir', 'burak.demir@example.com', '555-789-1234', 'Turkish'),
+    (10, 'Elif Aksoy', 'elif.aksoy@example.com', '555-234-5678', 'Turkish'),
+    (11, 'Sanjeewa Perera', 'sanjeewa.perera@example.com', '555-123-4567', 'Sri Lankan'),
+    (12, 'Malini Fernando', 'malini.fernando@example.com', '555-987-6543', 'Sri Lankan'),
+    (13, 'Pradeep Silva', 'pradeep.silva@example.com', '555-456-7890', 'Sri Lankan'),
+    (14, 'Tharanga Bandara', 'tharanga.bandara@example.com', '555-789-1234', 'Sri Lankan'),
+    (15, 'Ayesha Ratnayake', 'ayesha.ratnayake@example.com', '555-234-5678', 'Sri Lankan'),
+    (16, 'Michael Johnson', 'michael.johnson@example.com', '555-123-4567', 'USA'),
+    (17, 'Jennifer Smith', 'jennifer.smith@example.com', '555-987-6543', 'USA'),
+    (18, 'David Brown', 'david.brown@example.com', '555-456-7890', 'USA'),
+    (19, 'Emily Davis', 'emily.davis@example.com', '555-789-1234', 'USA'),
+    (20, 'Christopher Wilson', 'christopher.wilson@example.com', '555-234-5678', 'USA');
+
+INSERT INTO freelancers (freelancer_id, full_name, email, contact_number, hourly_rate, availability_status, country_name)
+VALUES
+(1, 'Ayesha Patel', 'ayesha.patel@example.com', '555-123-4567', 45.00, 'Available', 'Pakistan'),
+(2, 'Fatima Khan', 'fatima.khan@example.com', '555-987-6543', 50.00, 'Available', 'Pakistan'),
+(3, 'Zainab Ali', 'zainab.ali@example.com', '555-456-7890', 55.00, 'Available', 'Pakistan'),
+(4, 'Ahmed Malik', 'ahmed.malik@example.com', '555-789-1234', 40.00, 'Unavailable', 'Pakistan'),
+(5, 'Hassan Ahmed', 'hassan.ahmed@example.com', '555-234-5678', 65.00, 'Available', 'Pakistan'),
+(6, 'Sana Khan', 'sana.khan@example.com', '555-876-5432', 60.00, 'Available', 'Bangladesh'),
+(7, 'Farhan Khan', 'farhan.khan@example.com', '555-789-5678', 50.00, 'Unavailable', 'Bangladesh'),
+(8, 'Amina Hussain', 'amina.hussain@example.com', '555-234-8765', 55.00, 'Available', 'Bangladesh'),
+(9, 'Omar Siddiqui', 'omar.siddiqui@example.com', '555-567-2345', 60.00, 'Available', 'Bangladesh'),
+(10, 'Emaan Raza', 'emaan.raza@example.com', '555-987-5432', 45.00, 'Available', 'Bangladesh'),
+(11, 'Oliver Harris', 'oliver.harris@example.com', '555-123-4567', 45.00, 'Available', 'USA'),
+(12, 'Sophia Scott', 'sophia.scott@example.com', '555-456-7890', 55.00, 'Available', 'USA'),
+(13, 'Lucas Allen', 'lucas.allen@example.com', '555-789-0123', 50.00, 'Available', 'USA'),
+(14, 'Amelia Turner', 'amelia.turner@example.com', '555-012-3456', 60.00, 'Available', 'USA'),
+(15, 'Jackson Hill', 'jackson.hill@example.com', '555-234-5678', 65.00, 'Available', 'USA'),
+(16, 'Olivia Lopez', 'olivia.lopez@example.com', '555-567-8901', 60.00, 'Available', 'Canada'),
+(17, 'Liam Moore', 'liam.moore@example.com', '555-890-1234', 50.00, 'Available', 'Canada'),
+(18, 'Charlotte King', 'charlotte.king@example.com', '555-234-5678', 55.00, 'Available', 'Canada'),
+(19, 'Henry Young', 'henry.young@example.com', '555-567-8901', 60.00, 'Available', 'Canada'),
+(20, 'Sophia Turner', 'sophia.turner@example.com', '555-890-1234', 45.00, 'Available', 'Canada'),
+(21, 'Rahul Sharma', 'rahul.sharma@example.com', '555-987-6543', 50.00, 'Available', 'India'),
+(22, 'Aishwarya Patel', 'aishwarya.patel@example.com', '555-456-7890', 55.00, 'Available', 'India'),
+(23, 'Amit Singh', 'amit.singh@example.com', '555-789-1234', 40.00, 'Unavailable', 'India'),
+(24, 'Priya Sharma', 'priya.sharma@example.com', '555-234-5678', 65.00, 'Available', 'India'),
+(25, 'Noah Martinez', 'noah.martinez@example.com', '555-876-5432', 60.00, 'Available', 'India'),
+(26, 'Isabella Clark', 'isabella.clark@example.com', '555-789-5678', 50.00, 'Unavailable', 'Nepal'),
+(27, 'Liam Wilson', 'liam.wilson@example.com', '555-234-8765', 55.00, 'Available', 'Nepal'),
+(28, 'Mia Garcia', 'mia.garcia@example.com', '555-567-2345', 60.00, 'Available', 'Nepal'),
+(29, 'Sophia Lopez', 'sophia.lopez@example.com', '555-987-5432', 45.00, 'Available', 'Nepal'),
+(30, 'Elijah Scott', 'elijah.scott@example.com', '555-234-5678', 70.00, 'Available', 'Nepal');
+
+
+
+	INSERT INTO skills VALUES
+    (1, 'Web Development'),
+    (2, 'Graphic Design'),
+    (3, 'Data Analysis'),
+    (4, 'Content Writing'),
+    (5, 'Software Engineering'),
+    (6, 'UX Design'),
+    (7, 'Mobile App Development'),
+    (8, 'Digital Marketing'),
+    (9, 'Video Editing'),
+    (10, 'Social Media Management');
+
+
+INSERT INTO freelancer_skills (freelancer_id, skill_id)
+VALUES
+(1, 1),  -- Ayesha Patel: Web Development
+(1, 3),  -- Ayesha Patel: Data Analysis
+(2, 2),  -- Fatima Khan: Graphic Design
+(2, 4),  -- Fatima Khan: Content Writing
+(3, 5),  -- Zainab Ali: Software Engineering
+(3, 7),  -- Zainab Ali: Mobile App Development
+(4, 1),  -- Ahmed Malik: Web Development
+(4, 9),  -- Ahmed Malik: Video Editing
+(5, 5),  -- Hassan Ahmed: Software Engineering
+(5, 10), -- Hassan Ahmed: Social Media Management
+(6, 6),  -- Sana Khan: UX Design
+(6, 9),  -- Sana Khan: Video Editing
+(7, 2),  -- Farhan Khan: Graphic Design
+(7, 3),  -- Farhan Khan: Data Analysis
+(8, 1),  -- Amina Hussain: Web Development
+(8, 5),  -- Amina Hussain: Software Engineering
+(9, 2),  -- Omar Siddiqui: Graphic Design
+(9, 8),  -- Omar Siddiqui: Digital Marketing
+(10, 10),-- Emaan Raza: Social Media Management
+(10, 6), -- Emaan Raza: UX Design
+(11, 1), -- Oliver Harris: Web Development
+(11, 3), -- Oliver Harris: Data Analysis
+(12, 2), -- Sophia Scott: Graphic Design
+(12, 5), -- Sophia Scott: Software Engineering
+(13, 1), -- Lucas Allen: Web Development
+(13, 8), -- Lucas Allen: Digital Marketing
+(14, 2), -- Amelia Turner: Graphic Design
+(14, 6), -- Amelia Turner: UX Design
+(15, 1), -- Jackson Hill: Web Development
+(15, 5), -- Jackson Hill: Software Engineering
+(16, 2), -- Olivia Lopez: Graphic Design
+(16, 9), -- Olivia Lopez: Video Editing
+(17, 1), -- Liam Moore: Web Development
+(17, 3), -- Liam Moore: Data Analysis
+(18, 2), -- Charlotte King: Graphic Design
+(18, 10),-- Charlotte King: Social Media Management
+(19, 1), -- Henry Young: Web Development
+(19, 4), -- Henry Young: Content Writing
+(20, 5), -- Sophia Turner: Software Engineering
+(20, 8), -- Sophia Turner: Digital Marketing
+(21, 7); -- Rahul Sharma : Mobile App Development
+
+	INSERT INTO projects (project_id, client_id, title, description, budget, deadline, status) VALUES
+    (1, 1, 'Web Development', 'Redesign our company website with a modern and responsive design.', 8000.00, '2023-04-25', 'Completed'),
+    (2, 2, 'Digital Marketing', 'Plan and execute a product launch event for our new product line.', 12000.00, '2023-06-01', 'Completed'),
+    (3, 3, 'Data Analysis', 'Conduct a comprehensive financial analysis of our company.', 5000.00, '2023-06-15', 'Completed'),
+    (4, 13, 'Mobile App Development', 'Develop a mobile app for our customers with advanced features.', 10000.00, '2023-05-31', 'Completed'),
+    (5, 10, 'Social Media Management', 'Create and manage a social media campaign to increase brand visibility.', 6000.00, '2023-08-05', 'In Progress'),
+    (6, 19, 'Graphic Design', 'Design a new logo for our brand to give it a fresh look.', 2000.00, '2023-04-15', 'Completed'),
+    (7, 4, 'Data Analysis', 'Conduct market research to identify new business opportunities.', 4000.00, '2023-05-20', 'Completed'),
+    (8, 18, 'Content Writing', 'Create engaging and informative content for our blog and social media channels.', 3000.00, '2023-08-10', 'In Progress'),
+    (9, 20, 'Data Analysis', 'Create interactive data visualizations for our sales and marketing reports.', 6000.00, '2023-07-15', 'Completed'),
+    (10, 15, 'Content Writing', 'Write persuasive copy for our advertising and promotional materials.', 2500.00, '2023-08-20', 'Open'),
+    (11, 5, 'Email Marketing', 'Write persuasive copy for our advertising and promotional materials.', 2500.00, '2023-08-20', 'Open'),
+    (12, 6, 'Video Editing', 'Write persuasive copy for our advertising and promotional materials.', 2500.00, '2023-08-20', 'Open'),
+    (13, 7, 'UX Design', 'Write persuasive copy for our advertising and promotional materials.', 2500.00, '2023-08-20', 'Open');
+
+
+
+	INSERT INTO project_skills_required (project_id, skill_id) VALUES
+    (1, 1),     -- Website Redesign requires skill 1: Web Development
+    (2, 8),     -- Product Launch requires skill 2: Digital Marketing
+    (3, 3),     -- Financial Analysis requires skill 3: Data Analysis
+    (4, 7),     -- Mobile App Development requires skill 7: Mobile App Development
+    (5, 10),     -- Social Media Campaign requires skill 5: social media management
+    (6, 2),     -- Logo Design requires skill 2: Graphic Design
+    (7, 3),     -- Market Research requires skill 3: Data Analysis
+    (8, 4),     -- Content Creation requires skill 4: Content Writing
+    (9, 3),     -- Data Visualization requires skill 5: Data Analysis
+    (10, 4);    -- Copywriting requires skill 8: content writing
+
+	INSERT INTO bids (bid_id, project_id, freelancer_id, amount, proposal) VALUES
+    (1, 1, 1, 7500.00, 'I have extensive experience in web development, and I can create a stunning website for your company.'),
+    (2, 2, 13, 10000.00, 'With my expertise in digital marketing, I can promote your product launch event to reach a wider audience.'),
+    (3, 3, 11, 4500.00, 'I have strong analytical skills and can provide valuable insights through a detailed financial analysis.'),
+    (4, 4, 3, 9500.00, 'I have significant experience in mobile app development and can create a robust and user-friendly app for your business.'),
+    (5, 5, 5, 5500.00, 'I am well-versed in social media marketing and can manage a successful campaign to boost your brand presence.'),
+    (6, 6, 16, 1800.00, 'I have extensive experience in Graphic Designing and can create a modern logo Designs for your business.'),
+    (7, 7, 7, 3700.00, 'I specialize in Data Analysis and can conduct  marketing research for Business oppurtinities.'),
+    (8, 7, 17, 3800.00, 'With my expertise in data analysis, I can extract valuable insights from your financial data to provide business oppurtinities.'),
+    (9, 9, 17, 5800.00, 'Im an expert in data analysis and I can create ineractive data visualization for your sales and marketing reports.'),
+    (10, 6, 12, 1900.00, 'As a skilled graphic designer, I can revamp your website with eye-catching graphics and a user-friendly layout.'),
+    (11, 1, 8, 7700.00, 'Im an expert in web development and graphic design, and I can create a stunning website tailored to your companys needs.'),
+    (12, 2, 20, 11000.00, 'I can skillfully promote your product launch event, ensuring it captivates a vast audience and gains widespread exposure.'),
+    (13, 3, 17, 4700.00, 'Im really good at analyzing financial data, and I can give you really useful information to help you make important decisions'),
+    (14, 5, 18, 5700.00, 'I am well-versed in social media marketing and can manage a successful campaign to boost your brand presence.'),
+    (15, 9, 1, 5700.00, 'I have extensive experience in data anaysis and can create interactive visualization for sales and marketign reports.'),
+    (16, 10, 19, 2400.00, 'I specialize in content writing and can create persuasive copy for our advertising and promotional materials'),
+    (17, 8, 19, 2800.00, 'With my expertise in content marketing, I can develop a compelling strategy to attract and retain customers.'),
+    (18, 4, 21, 9000.00, 'I have experience in mobile app development and can conduct thorough testing to ensure the quality of your app.'),
+	(19, 8, 2, 2900.00, 'With my expertise in content writng, I can develop a compelling strategy to attract and retain customers.');
+
+
+	INSERT INTO payments (payment_id, project_id, client_id, freelancer_id, amount, payment_date) VALUES
+    (1, 1, 1, 8, 7700.00, '2023-04-25'),
+    (2, 2, 2, 13, 8000.00, '2023-06-01'),
+    (3, 3, 3, 17, 4700.00, '2023-06-15'),
+    (4, 4, 13, 3, 9500.00, '2023-05-31'),
+    --(5, 5, 10, 18, 5700.00, '2023-08-05'),
+    (6, 6, 19, 12, 1900.00, '2023-04-15'),
+    (7, 7, 4, 7, 3700.00, '2023-05-20'),
+    --(8, 8, 18, 2, 2900.00, '2023-08-10'),
+    (9, 9, 20, 17, 5800.00, '2023-07-15'),
+    (10, 10, 15, 19, 2400.00, '2023-07-25');
+
+
+	INSERT INTO earnings (earning_id, freelancer_id, project_id, amount, earning_date) VALUES
+    (1, 8, 1, 7700.00, '2023-04-25'),
+    (2, 13, 2, 8000.00, '2023-06-01'),
+    (3, 11, 3, 4500.00, '2023-06-15'),
+    (4, 3, 4, 9500.00, '2023-08-31'),
+    --(5, 18, 5, 5700.00, '2023-08-05'),
+    (6, 12, 6, 1900.00, '2023-04-15'),
+    (7, 4, 7, 3700.00, '2023-05-20'),
+   -- (8, 2, 8, 2900.00, '2023-08-10'),
+    (9, 17, 9, 5800.00, '2023-07-15'),
+    (10, 19, 10, 2400.00, '2023-07-25');
+
+
+
+	INSERT INTO reviews (review_id, project_id, client_id, freelancer_id, rating, review_text)
+VALUES
+    (1, 1, 1, 8, 5, 'Great work! Amina Hussain did an amazing job on our website redesign.'),
+    (2, 2, 2, 13, 4, 'Lucas Allan organized a successful product launch event. Well done!'),
+    (3, 3, 3, 11, 4, 'Liam Moore provided valuable insights in the financial analysis.'),
+    (4, 4, 13, 3, 5, 'Zainab Ali Mobile App Developemnt skills are top-notch. Highly recommended!'),
+    --(5, 5, 10, 18, 4, 'Charlotte King Social Media Management expertise is impressive.'),
+    (6, 6, 19, 12, 3, 'Sophia Schot design could have been better but overall good work.'),
+    (7, 7, 4, 7, 5, 'Farhan Khan did an excellent job on the Market research for providing Business oppurtnities.'),
+    --(8, 8, 18, 2, 4, 'Fatima Khan content writing work was exceptional. Minor communication issues.'),
+    (9, 9, 20, 17, 5, 'Liam Morre data analysis skills were crucial for our project success.'),
+    (10, 10, 15, 19, 4, 'Henry Young managed our copy writing needs well.');
+ 
+
+ -----------------------------------------------SELECT-------------------------------------------------------
+
+	select*from clients;
+
+	select*from freelancers;
+
+	select*from skills;
+
+	select*from freelancer_skills;
+
+	select*from projects;
+
+	select*from project_skills_required;
+
+	select*from bids;
+
+	select*from payments;
+
+	select*from earnings;
+
+	select*from reviews;
+
+
+
+
+-- Procedure 1: GetClientsFromMultipleCountries
+-- Query 1: Select clients from India and Turkish
+
+CREATE PROCEDURE GetClientsFromMultipleCountries
+     
+	 @country1 varchar(30),
+	 @country2 varchar(30)
+AS
+BEGIN
+
+    SELECT client_id, client_name, email, contact_number, country_name
+    FROM Clients
+    WHERE country_name IN ('India', 'Turkish');
+END
+GO
+drop procedure if exists GetClientsFromMultipleCountries
+
+-- Procedure 2: GetFreelancersByHourlyRate
+-- Query 2: Select freelancers with an hourly rate between $50 and $60
+CREATE PROCEDURE GetFreelancerByHourlyRate
+    @min_hourly_rate DECIMAL(10, 2),
+    @max_hourly_rate DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE hourly_rate BETWEEN @min_hourly_rate AND @max_hourly_rate;
+END
+GO 
+drop procedure if exists GetFreelancerByHourlyRate
+
+
+
+-- Procedure 3: GetProjectsByBudgetAndDeadline
+CREATE PROCEDURE GetProjectByBudgetAndDeadline
+    @min_budget DECIMAL(10, 2),
+    @deadline_date DATE
+AS
+BEGIN
+    SELECT project_id, client_id, title, description, budget, deadline, status
+    FROM projects
+    WHERE budget >= @min_budget AND deadline < @deadline_date;
+END
+GO
+drop procedure if exists GetProjectByBudgetAndDeadline
+
+-- Procedure 4: GetSkillsForProject
+CREATE PROCEDURE GetSkillsForProjects
+    @project_id INT
+AS
+BEGIN
+    SELECT psr.project_id, psr.skill_id, s.skill_name
+    FROM project_skills_required psr
+    JOIN skills s ON psr.skill_id = s.skill_id
+    WHERE psr.project_id = @project_id;
+END
+GO
+drop procedure if exists GetSkillsForProjects
+-- Procedure 5: GetBidsByFreelancerIDs
+CREATE PROCEDURE GetBidsByFreelancerID
+    @freelancer_ids NVARCHAR(MAX)
+AS
+BEGIN
+        SELECT bid_id, project_id, freelancer_id, amount, proposal
+        FROM bids
+        WHERE freelancer_id=@freelancer_ids;
+
+END
+GO
+exec GetBidsByFreelancerIDs 456;
+drop procedure if exists GetBidsByFreelancerID
+-- Procedure 6: GetPaymentsByDateAndAmount
+CREATE PROCEDURE GetsPaymentsByDateAndAmount
+    @min_payment_date DATE,
+    @max_payment_date DATE,
+    @min_amount DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT payment_id, project_id, client_id, freelancer_id, amount, payment_date
+    FROM payments
+    WHERE payment_date BETWEEN @min_payment_date AND @max_payment_date AND amount >= @min_amount;
+END
+GO
+
+drop procedure if exists  GetsPaymentsByDateAndAmount
+-- Procedure 7: GetProjectsAndReviewsByRating
+CREATE PROCEDURE GetProjectsAndReviewsByRatings
+    @status VARCHAR(50),
+    @min_rating INT
+AS
+BEGIN
+    SELECT projects.project_id, projects.client_id, projects.title, projects.status, reviews.rating, reviews.review_text
+    FROM projects
+    JOIN reviews ON projects.project_id = reviews.project_id
+    WHERE projects.status = @status AND reviews.rating >= @min_rating;
+END
+GO
+drop procedure if exists GetProjectsAndReviewsByRatings
+-- Procedure 8: GetFreelancersByAvailabilityAndHourlyRate
+CREATE PROCEDURE GetFreelancersByAvailabilityAndHourlyRates
+    @availability_status VARCHAR(50),
+    @max_hourly_rate DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE availability_status = @availability_status AND hourly_rate < @max_hourly_rate;
+END
+GO
+drop procedure if exists GetFreelancersByAvailabilityAndHourlyRates
+-- Procedure 9: GetProjectsByBudgetAndStatus
+CREATE PROCEDURE GetsProjectsByBudgetAndStatus
+    @min_budget DECIMAL(10, 2),
+    @status NVARCHAR(MAX)
+AS
+BEGIN
+        SELECT project_id, client_id, title, description, budget, deadline, status
+        FROM projects
+        WHERE budget=@min_budget  AND status=@status;
+END
+GO
+drop procedure if exists GetsProjectsByBudgetAndStatus
+-- Procedure 10: GetSkillsExcludingWebDevelopment
+CREATE PROCEDURE GetsSkillsExcludingWebDevelopment
+    @excluded_skill_id INT
+AS
+BEGIN
+    SELECT skill_id, skill_name
+    FROM skills
+    WHERE skill_id != @excluded_skill_id;
+END
+GO
+drop procedure if exists GetsSkillsExcludingWebDevelopment
+-- Procedure 11: GetBidsForProjectsByBudgetAndDeadline
+CREATE PROCEDURE GetsBidsForProjectsByBudgetAndDeadline
+    @min_budget DECIMAL(10, 2),
+    @deadline_date DATE
+AS
+BEGIN
+    SELECT bid_id, project_id, freelancer_id, amount, proposal
+    FROM bids
+    WHERE project_id IN (
+        SELECT project_id
+        FROM projects
+        WHERE budget >= @min_budget AND deadline < @deadline_date
+    );
+END
+GO
+drop procedure if exists GetsBidsForProjectsByBudgetAndDeadline
+-- Procedure 12: GetPaymentsByClientIDOrFreelancerID
+CREATE PROCEDURE GetsPaymentsByClientIDOrFreelancerID
+    @client_id INT,
+    @freelancer_id INT
+AS
+BEGIN
+    SELECT payment_id, project_id, client_id, freelancer_id, amount, payment_date
+    FROM payments
+    WHERE client_id = @client_id OR freelancer_id = @freelancer_id;
+END
+GO
+drop procedure if exists GetsPaymentsByClientIDOrFreelancerID
+-- Procedure 13: GetEarningsByFreelancerRating
+CREATE PROCEDURE GetsEarningsByFreelancerRating
+    @rating INT
+AS
+BEGIN
+    SELECT earning_id, freelancer_id, project_id, amount, earning_date
+    FROM earnings
+    WHERE freelancer_id IN (
+        SELECT freelancer_id
+        FROM reviews
+        WHERE rating = @rating
+    );
+END
+GO
+drop procedure if exists GetsEarningsByFreelancerRating
+-- Procedure 14: GetClientsWithoutProjects
+CREATE PROCEDURE GetsClientsWithoutProjects
+AS
+BEGIN
+    SELECT client_id, client_name, email, contact_number, country_name
+    FROM Clients
+    WHERE client_id NOT IN (
+        SELECT DISTINCT client_id
+        FROM projects
+    );
+END
+GO
+drop procedure if exists GetsClientsWithoutProjects
+-- Procedure 15: GetFreelancersFromUSAWithHourlyRate
+CREATE PROCEDURE GetsFreelancersFromUSAWithHourlyRate
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE availability_status = 'Available' AND hourly_rate BETWEEN 50.00 AND 60.00
+    AND freelancer_id IN (
+        SELECT freelancer_id
+        FROM Clients
+        WHERE country_name = 'USA'
+    );
+END
+GO
+drop procedure if exists GetsFreelancersFromUSAWithHourlyRate
+-- Procedure 16: GetProjectsByBidAmount
+CREATE PROCEDURE GetsProjectsByBidAmount
+    @min_bid_amount DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT project_id, client_id, title, description, budget, deadline, status
+    FROM projects
+    WHERE project_id IN (
+        SELECT project_id
+        FROM bids
+        WHERE amount >= @min_bid_amount
+    );
+END
+GO
+drop procedure if exists GetsProjectsByBidAmount
+-- Procedure 17: GetSkillsForHighBudgetProjects
+CREATE PROCEDURE GetsSkillsForHighBudgetProjects
+    @min_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT skill_id, skill_name
+    FROM skills
+    WHERE skill_id IN (
+        SELECT skill_id
+        FROM project_skills_required
+        WHERE project_id IN (
+            SELECT project_id
+            FROM projects
+            WHERE budget > @min_budget
+        )
+    );
+END
+GO
+drop procedure if exists GetsSkillsForHighBudgetProjects
+-- Procedure 18: GetProjectsByLowReviewRating
+CREATE PROCEDURE GetsProjectsByLowReviewRating
+    @max_rating INT
+AS
+BEGIN
+    SELECT project_id, client_id, title, description, budget, deadline, status
+    FROM projects
+    WHERE project_id IN (
+        SELECT project_id
+        FROM reviews
+        WHERE rating < @max_rating
+    );
+END
+GO
+drop procedure if exists GetsProjectsByLowReviewRating
+
+-- Procedure 19: GetBidsByFreelancerAndLowBudgetProjects
+CREATE PROCEDURE GetsBidsByFreelancerAndLowBudgetProjects
+    @freelancer_id INT,
+    @max_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT bid_id, project_id, freelancer_id, amount, proposal
+    FROM bids
+    WHERE freelancer_id = @freelancer_id AND project_id IN (
+        SELECT project_id
+        FROM projects
+        WHERE budget < @max_budget
+    );
+END
+GO
+drop procedure if exists GetsBidsByFreelancerAndLowBudgetProjects
+-- Procedure 20: GetPaymentsByClientAndCompletedProjects
+CREATE PROCEDURE GetsPaymentsByClientAndCompletedProjects
+    @client_id INT
+AS
+BEGIN
+    SELECT p.payment_id, p.project_id, p.client_id, p.freelancer_id, amount, payment_date
+    FROM payments p
+    JOIN reviews r ON p.project_id = r.project_id
+    WHERE p.client_id = @client_id AND r.rating = 5 AND p.project_id IN (
+        SELECT project_id
+        FROM projects
+        WHERE status = 'Completed'
+    );
+END
+GO
+drop procedure if exists GetsPaymentsByClientAndCompletedProjects
+-- Procedure 21: GetFreelancersByHighBudgetProjectsInUSA
+CREATE PROCEDURE GetsFreelancersByHighBudgetProjectsInUSA
+    @min_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE freelancer_id IN (
+        SELECT freelancer_id
+        FROM bids
+        WHERE project_id IN (
+            SELECT project_id
+            FROM projects
+            WHERE budget > @min_budget
+        )
+    );
+END
+GO
+drop procedure if exists GetsFreelancersByHighBudgetProjectsInUSA
+-- Procedure 22: GetProjectsByFreelancerIDs
+CREATE PROCEDURE GetsProjectsByFreelancerIDs
+    @freelancer_ids  VARCHAR(MAX)
+AS
+BEGIN
+        SELECT project_id, client_id, title, description, budget, deadline, status
+        FROM projects
+        WHERE project_id IN (
+            SELECT project_id
+            FROM bids
+            WHERE freelancer_id =  @freelancer_ids
+        );
+
+END
+GO
+EXEC GetsProjectsByFreelancerIDs 3;
+drop procedure if exists GetsProjectsByFreelancerIDs
+-- Procedure 23: GetClientsByHighPaymentAmount
+CREATE PROCEDURE GetsClientsByHighPaymentAmount
+    @min_payment_amount DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT client_id, client_name, email, contact_number, country_name
+    FROM Clients
+    WHERE client_id IN (
+        SELECT client_id
+        FROM payments
+        WHERE amount >= @min_payment_amount
+    );
+END
+GO
+drop procedure if exists GetsClientsByHighPaymentAmount
+-- Procedure 24: GetFreelancersByInProgressProjects
+CREATE PROCEDURE GetsFreelancersByInProgressProjects
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE freelancer_id IN (
+        SELECT DISTINCT freelancer_id
+        FROM bids
+        WHERE project_id IN (
+            SELECT project_id
+            FROM projects
+            WHERE status <> 'Completed'
+        )
+    );
+END
+GO
+drop procedure if exists GetsFreelancersByInProgressProjects
+-- Procedure 25: GetProjectsByFreelancersFromTurkey
+CREATE PROCEDURE GetsProjectsByFreelancersFromTurkey
+AS
+BEGIN
+    SELECT project_id, client_id, title, description, budget, deadline, status
+    FROM projects
+    WHERE project_id IN (
+        SELECT DISTINCT project_id
+        FROM bids
+        WHERE freelancer_id IN (
+            SELECT freelancer_id
+            FROM freelancers
+            WHERE  freelancers.country_name = 'Turkey'
+        )
+    );
+END
+GO
+drop procedure if exists GetsProjectsByFreelancersFromTurkey
+-- Procedure 26: GetProjectsByClientAndStatus
+CREATE PROCEDURE GetsProjectsByClientAndStatus
+    @client_id INT,
+    @status VARCHAR(50)
+AS
+BEGIN
+    SELECT project_id, client_id, title, description, budget, deadline, status
+    FROM projects
+    WHERE client_id = @client_id AND status = @status;
+END
+GO
+drop procedure if exists GetsProjectsByClientAndStatus
+-- Procedure 27: GetFreelancersBySkillsAndAvailability
+CREATE PROCEDURE GetsFreelancersBySkillsAndAvailability
+    @availability_status VARCHAR(20)
+AS
+BEGIN
+    SELECT f.freelancer_id, f.full_name, f.email, f.contact_number, f.hourly_rate
+    FROM freelancers f
+    JOIN freelancer_skills fs ON f.freelancer_id = fs.freelancer_id
+    WHERE f.availability_status = @availability_status;
+END
+GO
+drop procedure if exists GetsFreelancersBySkillsAndAvailability
+-- Procedure 28: GetProjectsByClientCountryAndBudget
+CREATE PROCEDURE GetsProjectsByClientCountryAndBudget
+    @country_name VARCHAR(50),
+    @min_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN clients c ON p.client_id = c.client_id
+    WHERE c.country_name = @country_name AND p.budget > @min_budget;
+END
+GO
+drop procedure if exists GetsProjectsByClientCountryAndBudget
+-- Procedure 29: GetFreelancersByReviewsAndHourlyRate
+CREATE PROCEDURE GetsFreelancersByReviewsAndHourlyRate
+    @min_rating INT,
+    @max_rating INT,
+    @min_hourly_rate DECIMAL(10, 2),
+    @max_hourly_rate DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE hourly_rate BETWEEN @min_hourly_rate AND @max_hourly_rate
+    AND freelancer_id IN (
+        SELECT freelancer_id
+        FROM reviews
+        WHERE rating BETWEEN @min_rating AND @max_rating
+    );
+END
+GO
+drop procedure if exists GetsFreelancersByReviewsAndHourlyRate
+-- Procedure 33: GetProjectsByStatusAndHourlyRate 
+CREATE PROCEDURE GetProjectsByStatusAndHourlyRate
+    @status VARCHAR(20),
+    @min_hourly_rate DECIMAL(10, 2),
+    @max_hourly_rate DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN bids b ON p.project_id = b.project_id
+    JOIN freelancers f ON b.freelancer_id = f.freelancer_id
+    WHERE p.status = @status AND f.hourly_rate BETWEEN @min_hourly_rate AND @max_hourly_rate;
+END
+GO
+drop procedure if exists GetProjectsByStatusAndHourlyRate
+-- Procedure 41: GetProjectsByFreelancerCountryAndRating
+CREATE PROCEDURE GetProjectsByFreelancerCountryAndRating
+    @country_name VARCHAR(50),
+    @min_rating INT
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN bids b ON p.project_id = b.project_id
+    JOIN freelancers f ON b.freelancer_id = f.freelancer_id
+    JOIN reviews r ON b.freelancer_id = r.freelancer_id
+    WHERE f.country_name = @country_name AND r.rating IN (@min_rating, @min_rating + 1);
+END
+GO
+drop procedure if exists GetProjectsByFreelancerCountryAndRating
+-- Procedure 42: GetFreelancersByCountryAndBudget
+CREATE PROCEDURE GetFreelancersByCountryAndBudget
+    @country_name VARCHAR(50),
+    @min_budget DECIMAL(10, 2),
+    @max_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT f.freelancer_id, f.full_name, f.email, f.contact_number, f.hourly_rate
+    FROM freelancers f
+    WHERE f.country_name = @country_name AND f.hourly_rate BETWEEN @min_budget AND @max_budget;
+END
+GO
+drop procedure if exists GetFreelancersByCountryAndBudget
+-- Procedure 43: GetProjectsBySkillAndDeadline
+CREATE PROCEDURE GetProjectsBySkillAndDeadline
+    @skill_id INT,
+    @deadline_date DATE
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN project_skills_required psr ON p.project_id = psr.project_id
+    WHERE psr.skill_id = @skill_id AND p.deadline < @deadline_date;
+END
+GO
+drop procedure if exists GetProjectsBySkillAndDeadline
+-- Procedure 44: GetFreelancersByAvailabilityAndBudget
+CREATE PROCEDURE GetFreelancersByAvailabilityAndBudget
+    @availability_status VARCHAR(20),
+    @min_budget DECIMAL(10, 2),
+    @max_budget DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT f.freelancer_id, f.full_name, f.email, f.contact_number, f.hourly_rate
+    FROM freelancers f
+    WHERE f.availability_status = @availability_status AND f.hourly_rate BETWEEN @min_budget AND @max_budget;
+END
+GO
+drop procedure if exists GetFreelancersByAvailabilityAndBudget
+-- Procedure 45: GetProjectsByClientAndHourlyRate
+CREATE PROCEDURE GetProjectsByClientAndHourlyRate
+    @client_id INT,
+    @min_hourly_rate DECIMAL(10, 2),
+    @max_hourly_rate DECIMAL(10, 2)
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN bids b ON p.project_id = b.project_id
+    JOIN freelancers f ON b.freelancer_id = f.freelancer_id
+    WHERE p.client_id = @client_id AND f.hourly_rate BETWEEN @min_hourly_rate AND @max_hourly_rate;
+END
+GO
+drop procedure if exists GetProjectsByClientAndHourlyRate
+
+-- Procedure 46: GetFreelancersByBudgetAndAvailability
+CREATE PROCEDURE GetFreelancersByBudgetAndAvailability
+    @min_budget DECIMAL(10, 2),
+    @max_budget DECIMAL(10, 2),
+    @availability_status VARCHAR(20)
+AS
+BEGIN
+    SELECT freelancer_id, full_name, email, contact_number, hourly_rate, availability_status
+    FROM freelancers
+    WHERE hourly_rate BETWEEN @min_budget AND @max_budget AND availability_status = @availability_status;
+END
+GO
+drop procedure if exists GetFreelancersByBudgetAndAvailability
+
+-- Procedure 47: GetProjectsByFreelancerSkillsAndStatus
+CREATE PROCEDURE GetProjectsByFreelancerSkillsAndStatus
+    @freelancer_id INT,
+    @status VARCHAR(20)
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN project_skills_required psr ON p.project_id = psr.project_id
+    WHERE psr.skill_id IN (
+        SELECT skill_id
+        FROM freelancer_skills
+        WHERE freelancer_id = @freelancer_id
+    )
+    AND p.status = @status;
+END
+GO
+drop procedure if exists GetProjectsByFreelancerSkillsAndStatus
+-- Procedure 48: GetProjectsByStatusAndClientCountry
+CREATE PROCEDURE GetProjectsByStatusAndClientCountry
+    @status VARCHAR(20),
+    @country_name VARCHAR(50)
+AS
+BEGIN
+    SELECT p.project_id, p.client_id, p.title, p.description, p.budget, p.deadline, p.status
+    FROM projects p
+    JOIN clients c ON p.client_id = c.client_id
+    WHERE p.status = @status AND c.country_name = @country_name;
+END
+GO
+drop procedure if exists GetProjectsByStatusAndClientCountry
+
+
+
+
+-- Procedure 1: GetClientsFromMultipleCountries
+EXEC GetClientsFromMultipleCountries 'India', 'Turkish';
+
+-- Procedure 2: GetFreelancerByHourlyRate
+EXEC GetFreelancerByHourlyRate 50.00, 60.00;
+-- Procedure 3: GetProjectByBudgetAndDeadline
+EXEC GetProjectByBudgetAndDeadline 5000, '2023-08-15';
+
+-- Procedure 4: GetSkillsForProjects
+EXEC GetSkillsForProjects 123;
+
+-- Procedure 5: GetBidsByFreelancerID
+EXEC GetBidsByFreelancerID 1;
+
+-- Procedure 6: GetsPaymentsByDateAndAmount
+EXEC GetsPaymentsByDateAndAmount '2023-01-01', '2023-06-30', 1000;
+
+-- Procedure 7: GetProjectsAndReviewsByRatings
+EXEC GetProjectsAndReviewsByRatings 'In Progress', 4;
+
+-- Procedure 8: GetFreelancersByAvailabilityAndHourlyRates
+EXEC GetFreelancersByAvailabilityAndHourlyRates 'Available', 80.00;
+
+-- Procedure 9: GetsProjectsByBudgetAndStatus
+EXEC GetsProjectsByBudgetAndStatus 5000, 'In Progress';
+
+-- Procedure 10: GetsSkillsExcludingWebDevelopment
+EXEC GetsSkillsExcludingWebDevelopment 3;
+
+-- Procedure 11: GetsBidsForProjectsByBudgetAndDeadline
+EXEC GetsBidsForProjectsByBudgetAndDeadline 2000, '2023-09-01';
+
+-- Procedure 12: GetsPaymentsByClientIDOrFreelancerID
+EXEC GetsPaymentsByClientIDOrFreelancerID 123, 456;
+
+-- Procedure 13: GetsEarningsByFreelancerRating
+EXEC GetsEarningsByFreelancerRating 5;
+
+-- Procedure 14: GetsClientsWithoutProjects
+EXEC GetsClientsWithoutProjects;
+
+-- Procedure 15: GetsFreelancersFromUSAWithHourlyRate
+EXEC GetsFreelancersFromUSAWithHourlyRate;
+
+-- Procedure 16: GetsProjectsByBidAmount
+EXEC GetsProjectsByBidAmount 1000;
+
+-- Procedure 17: GetsSkillsForHighBudgetProjects
+EXEC GetsSkillsForHighBudgetProjects 5000;
+
+-- Procedure 18: GetsProjectsByLowReviewRating
+EXEC GetsProjectsByLowReviewRating 4;
+
+-- Procedure 19: GetsBidsByFreelancerAndLowBudgetProjects
+EXEC GetsBidsByFreelancerAndLowBudgetProjects 456, 2000;
+
+-- Procedure 20: GetsPaymentsByClientAndCompletedProjects
+EXEC GetsPaymentsByClientAndCompletedProjects 123;
+
+-- Procedure 21: GetsFreelancersByHighBudgetProjectsInUSA
+EXEC GetsFreelancersByHighBudgetProjectsInUSA 5000;
+
+-- Procedure 22: GetsProjectsByFreelancerIDs
+EXEC GetsProjectsByFreelancerIDs '1';
+
+-- Procedure 23: GetsClientsByHighPaymentAmount
+EXEC GetsClientsByHighPaymentAmount 500;
+
+-- Procedure 24: GetsFreelancersByInProgressProjects
+EXEC GetsFreelancersByInProgressProjects;
+
+-- Procedure 25: GetsProjectsByFreelancersFromTurkey
+EXEC GetsProjectsByFreelancersFromTurkey;
+
+-- Procedure 26: GetsProjectsByClientAndStatus
+EXEC GetsProjectsByClientAndStatus 123, 'In Progress';
+
+-- Procedure 27: GetsFreelancersBySkillsAndAvailability
+EXEC GetsFreelancersBySkillsAndAvailability 'Available';
+
+-- Procedure 28: GetsProjectsByClientCountryAndBudget
+EXEC GetsProjectsByClientCountryAndBudget 'USA', 5000;
+
+-- Procedure 29: GetsFreelancersByReviewsAndHourlyRate
+EXEC GetsFreelancersByReviewsAndHourlyRate 4, 5, 50.00, 60.00;
+
+-- Procedure 33: GetProjectsByStatusAndHourlyRate
+EXEC GetProjectsByStatusAndHourlyRate 'In Progress', 40.00, 60.00;
+
+-- Procedure 41: GetProjectsByFreelancerCountryAndRating
+EXEC GetProjectsByFreelancerCountryAndRating 'USA', 4;
+
+-- Procedure 42: GetFreelancersByCountryAndBudget
+EXEC GetFreelancersByCountryAndBudget 'USA', 40.00, 80.00;
+
+-- Procedure 43: GetProjectsBySkillAndDeadline
+EXEC GetProjectsBySkillAndDeadline 5, '2023-09-15';
+
+-- Procedure 44: GetFreelancersByAvailabilityAndBudget
+EXEC GetFreelancersByAvailabilityAndBudget 'Available', 40.00, 80.00;
+
+-- Procedure 45: GetProjectsByClientAndHourlyRate
+EXEC GetProjectsByClientAndHourlyRate 123, 40.00, 60.00;
+
+-- Procedure 46: GetFreelancersByBudgetAndAvailability
+EXEC GetFreelancersByBudgetAndAvailability 40.00, 80.00, 'Available';
+
+-- Procedure 47: GetProjectsByFreelancerSkillsAndStatus
+EXEC GetProjectsByFreelancerSkillsAndStatus 456, 'In Progress';
+
+-- Procedure 48: GetProjectsByStatusAndClientCountry
+EXEC GetProjectsByStatusAndClientCountry 'In Progress', 'USA';
